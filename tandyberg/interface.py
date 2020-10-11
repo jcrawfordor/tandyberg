@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QGroupBox, QMainWindow, QVBoxLayout, QGridLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QGroupBox, QMainWindow, QVBoxLayout, QGridLayout, QMenuBar, QMenu
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
 
@@ -13,9 +13,13 @@ class App(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.controller = Controller('COM5')
+        self.controller = Controller()
+        self.controller.connect('COM5')
 
         self.setWindowTitle('Tandberg Controller')
+
+        menuBar = QMenuBar()
+        menuBar.addMenu(self.__getSpeedMenu)
 
         wid = QWidget(self)
         self.setCentralWidget(wid)
@@ -26,6 +30,18 @@ class App(QMainWindow):
         self.mainGridLayout.addWidget(self.__getZoomButtons(), 0, 1)
 
         self.controller.autofocus('on')
+
+    def __getSpeedMenu(self):
+        speedMenu = QMenu()
+
+        speeds = ['1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+        for speed in speeds:
+            speed = QAction()
+            speed.setText(speed)
+            speed.triggered.connect(self.controller.getSetSpeed(speed))
+            speedMenu.addAction(speed)
+
+        return speedMenu
 
     def __getZoomButtons(self):
         zoomButtonWidget = QWidget()

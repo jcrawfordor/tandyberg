@@ -33,6 +33,21 @@ commands only apply to the 720p. Experimentally, it all seems to work fine
 with the 720p, and the manual promises that the same control protocol will
 work with the newer 1080p models as well.
 
+# Development Wishlist
+
+* [X] Move camera left/right/up/down
+* [X] Zoom camera in/out
+* [ ] Get configuration from file instead of hardcoded
+* [ ] Set movement speed
+* [ ] Autofocus on/off and manual focus control
+* [ ] Autoexposure on/off and manual exposure controls (iris, backlight mode, gain, gamma, white balance)
+* [ ] Set and recall preset positions
+* [ ] Reconfigure/reconnect through GUI
+* [ ] Enable/disable IR command push and local IR commands
+* [ ] Turn prompt light on/off, maybe with some IPC method or something to do this from external programs
+* [ ] Detect camera capabilities and enable/disable buttons (e.g. 720p model refuses to pan diagonal)
+* [ ] OBS plugin???
+
 # Interfacing with a Precision HD Camera
 
 I only have a 720p, but it's also the strangest model of these cameras. The

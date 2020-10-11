@@ -4,10 +4,9 @@ import logging
 log = logging.getLogger('controller')
 
 class Controller(object):
-    def __init__(self, interface):
-        # Incidentally, all of the default pyserial options are correct for
-        # the cameras. For reference, this is 9600 baud, 8N1, no flow control.
-        self.s = serial.Serial(interface, timeout=5)
+    def __init__(self):
+        self.s = None
+        self.interface = None
         # Might want to be able to change this in the future to support
         # multiple cameras. 0x81 means "from 0 to 1" due to some weird
         # fixed bits in the VISCA spec. Assumption is that controller (us)
@@ -18,6 +17,19 @@ class Controller(object):
         self.panSpeed = b'\x01'
         self.tiltSpeed = b'\x01'
     
+    def connect(self, interface):
+        # Incidentally, all of the default pyserial options are correct for
+        # the cameras. For reference, this is 9600 baud, 8N1, no flow control.
+        self.s = serial.Serial(interface, timeout=5)
+        self.interface = interface
+    
+    def getSetSpeed(self, speed):
+        """Encloses a function to set pan/tilt speed"""
+        def do():
+            self.panSpeed = bytes.fromhex(f'0{speed}')
+            self.tiltSpeed = bytes.fromhex(f'0{speed}')
+        return do
+
     def autofocus(self, status):
         """Turns autofocus on or off"""
         lookup = {
@@ -121,6 +133,9 @@ class Controller(object):
 
     def getResponse(self, command):
         """Sends a command (in hex) to the camera and returns the result as bytes"""
+        if self.s = None:
+            return
+
         cmd = self.address
         cmd += command
         cmd += b'\xff'
