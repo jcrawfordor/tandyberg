@@ -18,6 +18,14 @@ class Controller(object):
         self.panSpeed = b'\x01'
         self.tiltSpeed = b'\x01'
     
+    def autofocus(self, status):
+        """Turns autofocus on or off"""
+        lookup = {
+            'on': b'\x01\x04\x38\x02',
+            'off': b'\x01\x04\x38\x03',
+        }
+        self.expectOK(lookup[status])
+    
     def steer(self, direction):
         """Steer in a direction"""
         # The only reason "stop" isn't one of the options here is because the

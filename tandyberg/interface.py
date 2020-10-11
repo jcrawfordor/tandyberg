@@ -25,6 +25,8 @@ class App(QMainWindow):
         self.mainGridLayout.addWidget(self.__getNavButtons(), 0, 0)
         self.mainGridLayout.addWidget(self.__getZoomButtons(), 0, 1)
 
+        self.controller.autofocus('on')
+
     def __getZoomButtons(self):
         zoomButtonWidget = QWidget()
         buttonGridLayout = QGridLayout()
