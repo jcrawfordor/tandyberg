@@ -577,7 +577,11 @@
    <addaction name="menuPort"/>
    <addaction name="menuSet_Preset"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+  </widget>
   <action name="slews1">
    <property name="checkable">
     <bool>true</bool>

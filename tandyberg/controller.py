@@ -1,5 +1,6 @@
 import serial
 import logging
+from serial.tools import list_ports
 
 log = logging.getLogger('controller')
 
@@ -20,8 +21,12 @@ class Controller(object):
     def connect(self, interface):
         # Incidentally, all of the default pyserial options are correct for
         # the cameras. For reference, this is 9600 baud, 8N1, no flow control.
-        self.s = serial.Serial(interface, timeout=5)
-        self.interface = interface
+        try:
+            self.s = serial.Serial(interface, timeout=5)
+            self.interface = interface
+        except Exception as error:
+            log.exception("Exception when connecting to device.")
+            self.interface = None
     
     def getSetSpeed(self, speed):
         """Encloses a function to set pan/tilt speed"""
@@ -109,10 +114,10 @@ class Controller(object):
         """Returns a tuple of pan, tilt, zoom position for the camera. useful
         for saving presets."""
         zoomResp = self.getResponse(b'\x09\x04\x47')
-        zoom = Controller.__fromVisca2b(zoomResp[1:4])
-        panTiltResp = self.getResponse('\x09\x06\x12')
-        pan = Controller.__fromVisca2b(panTiltResp[1:4])
-        tilt = Controller.__fromVisca2b(panTiltResp[5:8])
+        zoom = Controller.__fromVisca2b(zoomResp[1:5])
+        panTiltResp = self.getResponse(b'\x09\x06\x12')
+        pan = Controller.__fromVisca2b(panTiltResp[1:5])
+        tilt = Controller.__fromVisca2b(panTiltResp[5:9])
         return (pan, tilt, zoom)
     
     def goToPos(self, pan, tilt, zoom):
@@ -164,6 +169,12 @@ class Controller(object):
             raise Exception(f'Received non-OK status response {resp.hex()}')
 
     @staticmethod
+    def getPorts():
+        """Gets a list of available serial ports"""
+        ports = list_ports.comports()
+        return [x.device for x in ports]
+
+    @staticmethod
     def __toVisca2b(value):
         """Converts an integer to the weird VISCA 2-byte number representation, in hex for convenience."""
         # The VISCA format in question looks like 0i:0j:0k:0l where ijkl are
@@ -177,6 +188,7 @@ class Controller(object):
 
     @staticmethod
     def __fromVisca2b(value):
+        log.debug(f"value: {value.hex()}")
         """Converts the weird VISCA 2-byte number to an integer."""
         first_byte = (value[0] << 4) | value[1]
         second_byte = (value[2] << 4) | value[3]
