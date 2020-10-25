@@ -38,17 +38,22 @@ work with the newer 1080p models as well.
 * [X] Move camera left/right/up/down
 * [X] Zoom camera in/out
 * [X] Get configuration from file instead of hardcoded
-* [ ] Set movement speed
+* [X] Set movement speed
+* [X] Set and recall preset positions
 * [ ] Autofocus on/off and manual focus control
 * [ ] Autoexposure on/off and manual exposure controls (iris, backlight mode, gain, gamma, white balance)
-* [X] Set and recall preset positions
 * [ ] Reconfigure/reconnect through GUI
 * [ ] Enable/disable IR command push and local IR commands
 * [ ] Turn prompt light on/off, maybe with some IPC method or something to do this from external programs
 * [ ] Detect camera capabilities and enable/disable buttons (e.g. 720p model refuses to pan diagonal)
 * [ ] Global keyboard shortcuts
-* [ ] Simple network API for remote control, at least preset recall
-* [ ] OBS plugin???
+* [ ] "patrol" mode for presets
+
+Refactoring:
+
+* [ ] Use PTZF instructions for preset recall so that zoom isn't noticeably delayed
+* [ ] Think about better UX for speed control
+* [ ] Fix keyboard controls so they aren't "jerky" due to key repeat
 
 # Interfacing with a Precision HD Camera
 
