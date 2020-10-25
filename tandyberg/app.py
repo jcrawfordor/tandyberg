@@ -77,6 +77,15 @@ class App(QMainWindow):
         self.layout.spreset8.triggered.connect(self.setPreset('8'))
         self.layout.spreset9.triggered.connect(self.setPreset('9'))
         self.layout.spreset10.triggered.connect(self.setPreset('10'))
+        # SET SPEED
+        self.layout.slews1.triggered.connect(self.controller.getSetSpeed('0'))
+        self.layout.slews3.triggered.connect(self.controller.getSetSpeed('2'))
+        self.layout.slews5.triggered.connect(self.controller.getSetSpeed('4'))
+        self.layout.slews7.triggered.connect(self.controller.getSetSpeed('6'))
+        self.layout.slews9.triggered.connect(self.controller.getSetSpeed('8'))
+        self.layout.slews11.triggered.connect(self.controller.getSetSpeed('a'))
+        self.layout.slews13.triggered.connect(self.controller.getSetSpeed('c'))
+        self.layout.slews15.triggered.connect(self.controller.getSetSpeed('e'))
     
     def tryConnect(self, interface):
         """Returns a function that tries to connect to a port"""
