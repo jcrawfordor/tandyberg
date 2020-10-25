@@ -46,6 +46,8 @@ work with the newer 1080p models as well.
 * [ ] Enable/disable IR command push and local IR commands
 * [ ] Turn prompt light on/off, maybe with some IPC method or something to do this from external programs
 * [ ] Detect camera capabilities and enable/disable buttons (e.g. 720p model refuses to pan diagonal)
+* [ ] Global keyboard shortcuts
+* [ ] Simple network API for remote control, at least preset recall
 * [ ] OBS plugin???
 
 # Interfacing with a Precision HD Camera

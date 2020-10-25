@@ -133,7 +133,7 @@ class Controller(object):
 
     def getResponse(self, command):
         """Sends a command (in hex) to the camera and returns the result as bytes"""
-        if self.s = None:
+        if self.s == None:
             return
 
         cmd = self.address
