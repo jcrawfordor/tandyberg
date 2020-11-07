@@ -126,14 +126,14 @@ class Controller(object):
         # We need to use two different commands to set PT and zoom. Should
         # be okay to send these at once due to double-buffering, as long as
         # the user doesn't go wild with mashing buttons.
+        cmd = b'\x01\x04\x47'
+        cmd += Controller.__toVisca2b(zoom)
+        self.expectOK(cmd)
         cmd = b'\x01\x06\x02'
         cmd += self.panSpeed
         cmd += self.tiltSpeed
         cmd += Controller.__toVisca2b(pan)
         cmd += Controller.__toVisca2b(tilt)
-        self.expectOK(cmd)
-        cmd = b'\x01\x04\x47'
-        cmd += Controller.__toVisca2b(zoom)
         self.expectOK(cmd)
 
     def getResponse(self, command):
