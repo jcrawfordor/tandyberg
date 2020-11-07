@@ -115,25 +115,21 @@ class Controller(object):
         for saving presets."""
         zoomResp = self.getResponse(b'\x09\x04\x47')
         zoom = Controller.__fromVisca2b(zoomResp[1:5])
+        focusResp = self.getResponse(b'\x09\x04\x48')
+        focus = Controller.__fromVisca2b(focusResp[1:5])
         panTiltResp = self.getResponse(b'\x09\x06\x12')
         pan = Controller.__fromVisca2b(panTiltResp[1:5])
         tilt = Controller.__fromVisca2b(panTiltResp[5:9])
-        return (pan, tilt, zoom)
-    
-    def goToPos(self, pan, tilt, zoom):
+        return (pan, tilt, zoom, focus)
+
+    def goToPos(self, pan, tilt, zoom, focus):
         """Send camera directly to a P,T,Z position, useful for recalling
         presets."""
-        # We need to use two different commands to set PT and zoom. Should
-        # be okay to send these at once due to double-buffering, as long as
-        # the user doesn't go wild with mashing buttons.
-        cmd = b'\x01\x06\x02'
-        cmd += self.panSpeed
-        cmd += self.tiltSpeed
+        cmd = b'\x01\x06\x20'
         cmd += Controller.__toVisca2b(pan)
         cmd += Controller.__toVisca2b(tilt)
-        self.expectOK(cmd)
-        cmd = b'\x01\x04\x47'
         cmd += Controller.__toVisca2b(zoom)
+        cmd += Controller.__toVisca2b(focus)
         self.expectOK(cmd)
 
     def getResponse(self, command):
@@ -176,9 +172,9 @@ class Controller(object):
 
     @staticmethod
     def __toVisca2b(value):
-        """Converts an integer to the weird VISCA 2-byte number representation, in hex for convenience."""
+        """Converts an integer to the weird VISCA 2-byte number representation"""
         # The VISCA format in question looks like 0i:0j:0k:0l where ijkl are
-        # nibbles of the two-byte number.
+        # nibbles of the two-byte number, most significant first.
         b = value.to_bytes(2, 'big')
         first_nibble = b[0] >> 4
         second_nibble = b[0] & 0x0f
