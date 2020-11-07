@@ -104,11 +104,11 @@ class App(QMainWindow):
     
     def autofocus(self):
         if self.layout.focusauto.isChecked():
-            self.controller.enableAutoFocus()
-            self.layout.focusslider.setEnabled(False)
-        else:
             self.controller.disableAutoFocus()
             self.layout.focusslider.setEnabled(True)
+        else:
+            self.controller.enableAutoFocus()
+            self.layout.focusslider.setEnabled(False)
     
     def focus(self):
         self.controller.goToFocus(self.layout.focusslider.sliderPosition())
