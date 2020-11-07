@@ -1,5 +1,6 @@
 import logging, signal, sys, json
 from PyQt5.QtWidgets import QMainWindow, QApplication, QAction, QLabel
+from PyQt5.QtCore import Qt
 
 from tandyberg.controller import Controller
 from tandyberg.tandylayout import Ui_MainWindow
@@ -86,6 +87,31 @@ class App(QMainWindow):
         self.layout.slews11.triggered.connect(self.controller.getSetSpeed('a'))
         self.layout.slews13.triggered.connect(self.controller.getSetSpeed('c'))
         self.layout.slews15.triggered.connect(self.controller.getSetSpeed('e'))
+
+        # KEYBOARD CONTROLS
+        self.grabKeyboard() # Make keyboard events go to window
+        self.keyPressEvent.connect(self.keyDown)
+        self.keyReleaseEvent.connect(self.keyUp)
+        self.keyMap = {
+            Qt.Key_W: (self.controller.getSteerFunc('up'), self.controller.stopSteer),
+            Qt.Key_A: (self.controller.getSteerFunc('left'), self.controller.stopSteer),
+            Qt.Key_S: (self.controller.getSteerFunc('down'), self.controller.stopSteer),
+            Qt.Key_D: (self.controller.getSteerFunc('right'), self.controller.stopSteer),
+            Qt.Key_E: (self.controller.getZoomFunc('in'), self.controller.stopZoom),
+            Qt.Key_Q: (self.controller.getZoomFunc('out'), self.controller.stopZoom),
+        }
+    
+    def keyDown(self, event):
+        """Reimplement Qt keyboard event handling to do our keyboard controls"""
+        key = event.key()
+        if key in self.keyMap:
+            self.keyMap[key][0]()
+    
+    def keyUp(self, event):
+        key = event.key()
+        if key in self.keyMap:
+            self.keyMap[key][1]()
+
     
     def tryConnect(self, interface):
         """Returns a function that tries to connect to a port"""
