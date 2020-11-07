@@ -90,8 +90,6 @@ class App(QMainWindow):
 
         # KEYBOARD CONTROLS
         self.grabKeyboard() # Make keyboard events go to window
-        self.keyPressEvent.connect(self.keyDown)
-        self.keyReleaseEvent.connect(self.keyUp)
         self.keyMap = {
             Qt.Key_W: (self.controller.getSteerFunc('up'), self.controller.stopSteer),
             Qt.Key_A: (self.controller.getSteerFunc('left'), self.controller.stopSteer),
@@ -101,13 +99,13 @@ class App(QMainWindow):
             Qt.Key_Q: (self.controller.getZoomFunc('out'), self.controller.stopZoom),
         }
     
-    def keyDown(self, event):
+    def keyPressEvent(self, event):
         """Reimplement Qt keyboard event handling to do our keyboard controls"""
         key = event.key()
         if key in self.keyMap:
             self.keyMap[key][0]()
     
-    def keyUp(self, event):
+    def keyReleaseEvent(self, event):
         key = event.key()
         if key in self.keyMap:
             self.keyMap[key][1]()
@@ -145,6 +143,8 @@ class App(QMainWindow):
     def setPreset(self, preset):
         def do():
             loc = self.controller.getPos()
+            if 'presets' not in self.config:
+                self.config['presets'] = {}
             self.config['presets'][preset] = loc
             self.saveConfig()
         return do
