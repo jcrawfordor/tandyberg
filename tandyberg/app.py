@@ -87,6 +87,9 @@ class App(QMainWindow):
         self.layout.slews11.triggered.connect(self.controller.getSetSpeed('a'))
         self.layout.slews13.triggered.connect(self.controller.getSetSpeed('c'))
         self.layout.slews15.triggered.connect(self.controller.getSetSpeed('e'))
+        # FOCUS
+        self.layout.focusauto.pressed.connect(self.autofocus)
+        self.layout.focusslider.valueChanged.connect(self.focus)
 
         # KEYBOARD CONTROLS
         self.grabKeyboard() # Make keyboard events go to window
@@ -99,6 +102,17 @@ class App(QMainWindow):
             Qt.Key_Q: (self.controller.getZoomFunc('out'), self.controller.stopZoom),
         }
     
+    def autofocus(self):
+        if self.layout.focusauto.isChecked():
+            self.controller.enableAutoFocus()
+            self.layout.focusslider.setEnabled(False)
+        else:
+            self.controller.disableAutoFocus()
+            self.layout.focusslider.setEnabled(True)
+    
+    def focus(self):
+        self.controller.goToFocus(self.layout.focusslider.sliderPosition())
+    
     def keyPressEvent(self, event):
         """Reimplement Qt keyboard event handling to do our keyboard controls"""
         key = event.key()
@@ -109,7 +123,6 @@ class App(QMainWindow):
         key = event.key()
         if key in self.keyMap and not event.isAutoRepeat():
             self.keyMap[key][1]()
-
     
     def tryConnect(self, interface):
         """Returns a function that tries to connect to a port"""

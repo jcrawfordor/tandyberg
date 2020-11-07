@@ -109,6 +109,20 @@ class Controller(object):
         # This is a separate method for consistency with stopSteer
         cmd = b'\x01\x04\x07\x00'
         self.expectOK(cmd)
+    
+    def enableAutoFocus(self):
+        cmd = b'\x01\x04\x38\x02'
+        self.expectOK(cmd)
+
+    def disableAutoFocus(self):
+        cmd = b'\x01\x04\x38\x03'
+        self.expectOK(cmd)
+    
+    def goToFocus(self, value):
+        """Focus - range is probably full motor range but not sure"""
+        cmd = b'\x01\x04\x48'
+        cmd += self.__toVisca2b(value)
+        self.expectOK(cmd)
 
     def getPos(self):
         """Returns a tuple of pan, tilt, zoom position for the camera. useful
