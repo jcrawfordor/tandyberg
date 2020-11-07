@@ -107,7 +107,7 @@ class App(QMainWindow):
     
     def keyReleaseEvent(self, event):
         key = event.key()
-        if key in self.keyMap:
+        if key in self.keyMap and not event.isAutoRepeat():
             self.keyMap[key][1]()
 
     
