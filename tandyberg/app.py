@@ -102,7 +102,7 @@ class App(QMainWindow):
     def keyPressEvent(self, event):
         """Reimplement Qt keyboard event handling to do our keyboard controls"""
         key = event.key()
-        if key in self.keyMap:
+        if key in self.keyMap and not event.isAutoRepeat():
             self.keyMap[key][0]()
     
     def keyReleaseEvent(self, event):
