@@ -126,7 +126,7 @@ class Controller(object):
     
     def getFocus(self):
         resp = self.getResponse(b'\x09\x04\x48')
-        focus = controller.__fromVisca2b(resp[1:5])
+        focus = Controller.__fromVisca2b(resp[1:5])
         print(focus)
         return focus
 
