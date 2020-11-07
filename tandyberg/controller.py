@@ -123,6 +123,12 @@ class Controller(object):
         cmd = b'\x01\x04\x48'
         cmd += self.__toVisca2b(value)
         self.expectOK(cmd)
+    
+    def getFocus(self):
+        resp = self.getResponse(b'\x09\x04\x48')
+        focus = controller.__fromVisca2b(resp[1:5])
+        print(focus)
+        return focus
 
     def getPos(self):
         """Returns a tuple of pan, tilt, zoom position for the camera. useful
