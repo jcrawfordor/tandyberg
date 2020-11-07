@@ -110,14 +110,21 @@ class Controller(object):
         cmd = b'\x01\x04\x07\x00'
         self.expectOK(cmd)
     
-    def enableAutoFocus(self):
+    def toggleAutoFocus(self):
+        """The docs make it sound like this instruction enables autofocus, but testing confirms that it *toggles*"""
         cmd = b'\x01\x04\x38\x02'
         self.expectOK(cmd)
-
-    def disableAutoFocus(self):
-        cmd = b'\x01\x04\x38\x03'
-        self.expectOK(cmd)
     
+    def getAutoFocus(self):
+        """Returns true if AF is enabled"""
+        resp = self.getResponse(b'\x09\x04\x38')
+        if resp == b'\x50\x02':
+            return True
+        elif resp == b'\x50\x03':
+            return False
+        else:
+            raise Exception(f'Received invalid response {resp.hex()}')
+
     def goToFocus(self, value):
         """Focus - range is probably full motor range but not sure"""
         cmd = b'\x01\x04\x48'
